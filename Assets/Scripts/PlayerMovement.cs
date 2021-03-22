@@ -6,9 +6,10 @@ public class PlayerMovement : MonoBehaviour
 {
 
     [SerializeField] float speed = 7f;
-    [SerializeField] float airSpeed = 4f;
     [SerializeField] float gravity = -9.8f;
     [SerializeField] float jumpHeight = 3f;
+    [SerializeField] float dashSpeed = 100f;
+    [SerializeField] float dashTime = 0.01f;
 
     [SerializeField] Transform groundCheck;
     [SerializeField] float groundDistance = 0.4f;
@@ -20,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveVector;
     private bool isGrounded;
     private bool hasDoubleJump = true;
+    private bool isDashing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
         Move();
         Jump();
         DoubleJump();
+        Dash();
         UpdateGravity();
     }
 
@@ -89,6 +92,26 @@ public class PlayerMovement : MonoBehaviour
 
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+    }
+
+    private void Dash()
+    {
+        if(isDashing)
+        {
+            controller.Move(moveVector.normalized * dashSpeed * Time.deltaTime);
+        }
+        else if (Input.GetButtonDown("Dash"))
+        {
+            velocity = Vector3.zero;
+            isDashing = true;
+            StartCoroutine(DashTimer());
+        }
+    }
+
+    IEnumerator DashTimer()
+    {
+        yield return new WaitForSeconds(dashTime);
+        isDashing = false;
     }
 
     private void UpdateGravity()
