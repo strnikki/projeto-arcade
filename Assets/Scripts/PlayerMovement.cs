@@ -17,7 +17,9 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
 
     private Vector3 velocity;
+    private Vector3 move;
     private bool isGrounded;
+    private bool hasDoubleJump = true;
 
     // Start is called before the first frame update
     void Start()
@@ -30,24 +32,27 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         
-        Move(isGrounded);
-        Jump(isGrounded);
+        Move();
+        Jump();
+        DoubleJump();
+        UpdateGravity();
     }
 
-    private void Move(bool isGrounded)
+    private void Move()
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z;
+        move = transform.right * x + transform.forward * z;
         move = Vector3.ClampMagnitude(move, 1f);
 
         if(!isGrounded)
         {
-            // For higher speeds while in air, remove this condition
-            if(controller.velocity.magnitude < 7)
+            //controller.Move(move * airSpeed * Time.deltaTime);
+            Vector3 newVelocity = velocity + move * 2 * speed * Time.deltaTime;
+            if(newVelocity.magnitude < 7f)
             {
-            controller.Move(move * airSpeed * Time.deltaTime);
+                velocity += move * 2 * speed * Time.deltaTime;;
             }
         }
         else
@@ -56,22 +61,43 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Jump(bool isgrounded)
+    private void Jump()
     {
-        if(Input.GetButton("Jump") && isGrounded)
+        if(Input.GetButtonDown("Jump") && isGrounded)
         {
             // Mantain ground momentum
-            velocity = controller.velocity;
+            velocity = move * speed;
 
             // v = sqrt(h * -2 * g) ??
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-        
-        // Gravity update
+    }
+
+    private void DoubleJump()
+    {
+        if(isGrounded || !hasDoubleJump)
+            return;
+
+        if(Input.GetButtonDown("Jump"))
+        {
+            hasDoubleJump = false;
+
+            if(move.magnitude > 0f)
+                velocity = move * speed;
+            else
+                velocity = controller.velocity;
+
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+    }
+
+    private void UpdateGravity()
+    {
         if(isGrounded && velocity.y < 0)
         {
             velocity = Vector3.zero;
             velocity.y = -2f;
+            hasDoubleJump = true;
         }
         else
         {
