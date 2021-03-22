@@ -28,21 +28,31 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        
+        Move(isGrounded);
+        Jump(isGrounded);
+    }
 
+    private void Move(bool isGrounded)
+    {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * x + transform.forward * z;
         move = Vector3.ClampMagnitude(move, 1f);
-        controller.Move(move * speed * Time.deltaTime);
 
+        controller.Move(move * speed * Time.deltaTime);
+    }
+
+    private void Jump(bool isgrounded)
+    {
         if(Input.GetButton("Jump") && isGrounded)
         {
             // v = sqrt(h * -2 * g) ??
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        // Gravity Update
+        // Gravity update
         if(isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
