@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
 
     private Vector3 velocity;
-    private Vector3 move;
+    private Vector3 moveVector;
     private bool isGrounded;
     private bool hasDoubleJump = true;
 
@@ -43,21 +43,21 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        move = transform.right * x + transform.forward * z;
-        move = Vector3.ClampMagnitude(move, 1f);
+        moveVector = transform.right * x + transform.forward * z;
+        moveVector = Vector3.ClampMagnitude(moveVector, 1f);
 
         if(!isGrounded)
         {
             //controller.Move(move * airSpeed * Time.deltaTime);
-            Vector3 newVelocity = velocity + move * 2 * speed * Time.deltaTime;
+            Vector3 newVelocity = velocity + moveVector * 2 * speed * Time.deltaTime;
             if(newVelocity.magnitude < 7f)
             {
-                velocity += move * 2 * speed * Time.deltaTime;;
+                velocity = newVelocity;
             }
         }
         else
         {
-            controller.Move(move * speed * Time.deltaTime);
+            controller.Move(moveVector * speed * Time.deltaTime);
         }
     }
 
@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             // Mantain ground momentum
-            velocity = move * speed;
+            velocity = moveVector * speed;
 
             // v = sqrt(h * -2 * g) ??
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -82,8 +82,8 @@ public class PlayerMovement : MonoBehaviour
         {
             hasDoubleJump = false;
 
-            if(move.magnitude > 0f)
-                velocity = move * speed;
+            if(moveVector.magnitude > 0f)
+                velocity = moveVector * speed;
             else
                 velocity = controller.velocity;
 
