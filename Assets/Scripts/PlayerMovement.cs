@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
 
     [SerializeField] float speed = 7f;
+    [SerializeField] float airSpeed = 4f;
     [SerializeField] float gravity = -9.8f;
     [SerializeField] float jumpHeight = 3f;
 
@@ -41,20 +42,35 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         move = Vector3.ClampMagnitude(move, 1f);
 
-        controller.Move(move * speed * Time.deltaTime);
+        if(!isGrounded)
+        {
+            // For higher speeds while in air, remove this condition
+            if(controller.velocity.magnitude < 7)
+            {
+            controller.Move(move * airSpeed * Time.deltaTime);
+            }
+        }
+        else
+        {
+            controller.Move(move * speed * Time.deltaTime);
+        }
     }
 
     private void Jump(bool isgrounded)
     {
         if(Input.GetButton("Jump") && isGrounded)
         {
+            // Mantain ground momentum
+            velocity = controller.velocity;
+
             // v = sqrt(h * -2 * g) ??
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-
+        
         // Gravity update
         if(isGrounded && velocity.y < 0)
         {
+            velocity = Vector3.zero;
             velocity.y = -2f;
         }
         else
