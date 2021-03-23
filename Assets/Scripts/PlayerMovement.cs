@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveVector;
     private bool isGrounded;
     private bool isDashing;
+    private bool hasDoubleJump = true;
 
     void Start()
     {
@@ -32,10 +33,17 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if(!isDashing && isGrounded)
-            GetMovementInput();
+            SetMovementVector();
         Jump();
         if(!isGrounded)
+        {
+            DoubleJump();
             AirMovement();
+        }
+        else
+        {
+            hasDoubleJump = true;
+        }
         Dash();
         
         if(isDashing)
@@ -49,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + moveVector * speed * Time.fixedDeltaTime);
     }
 
-    private void GetMovementInput()
+    private void SetMovementVector()
     {
         Vector3 inputs = Vector3.zero;
         inputs.x = Input.GetAxis("Horizontal");
@@ -61,10 +69,28 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-         if (Input.GetButtonDown("Jump") && isGrounded)
+         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity), ForceMode.VelocityChange);
             //rb.velocity = New Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+        }
+    }
+
+    private void DoubleJump()
+    {
+        if(hasDoubleJump && Input.GetButtonDown("Jump"))
+        {
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            Vector3 inputs = Vector3.zero;
+            inputs.x = Input.GetAxisRaw("Horizontal");
+            inputs.z = Input.GetAxisRaw("Vertical");
+
+            if(inputs != Vector3.zero)
+                SetMovementVector();
+
+            rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity), ForceMode.VelocityChange);
+            hasDoubleJump = false;
         }
     }
 
