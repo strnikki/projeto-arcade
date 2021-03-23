@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] float speed;
-    [SerializeField] float groundSpeed = 7f;
+    [SerializeField] float speed = 7f;
+    [SerializeField] float airSpeed = 4f;
     [SerializeField] float gravity = -9.8f;
     [SerializeField] float jumpHeight = 3f;
     [SerializeField] float dashSpeed = 100f;
@@ -18,23 +18,24 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rb;
 
-    private Vector3 movePos;
+    private Vector3 moveVector;
     private bool isGrounded;
     private bool isDashing;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        speed = groundSpeed;
     }
 
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if(!isDashing)
+        if(!isDashing && isGrounded)
             GetMovementInput();
         Jump();
+        if(!isGrounded)
+            AirMovement();
         Dash();
         
         if(isDashing)
@@ -45,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movePos * speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + moveVector * speed * Time.fixedDeltaTime);
     }
 
     private void GetMovementInput()
@@ -54,7 +55,8 @@ public class PlayerMovement : MonoBehaviour
         inputs.x = Input.GetAxis("Horizontal");
         inputs.z = Input.GetAxis("Vertical");
 
-        movePos = transform.right * inputs.x + transform.forward * inputs.z;
+        moveVector = transform.right * inputs.x + transform.forward * inputs.z;
+        moveVector = Vector3.ClampMagnitude(moveVector, 1f);
     }
 
     private void Jump()
@@ -66,13 +68,24 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void AirMovement()
+    {
+        Vector3 inputs = Vector3.zero;
+        inputs.x = Input.GetAxis("Horizontal");
+        inputs.z = Input.GetAxis("Vertical");
+
+        Vector3 airMove = transform.right * inputs.x + transform.forward * inputs.z;
+        moveVector += airMove * airSpeed * Time.deltaTime;
+        moveVector = Vector3.ClampMagnitude(moveVector, 1f);
+    }
+
     private void Dash()
     {
         if (Input.GetButtonDown("Dash"))
         {
             isDashing = true;
             rb.drag = 8f;
-            rb.AddForce(movePos.normalized * dashSpeed, ForceMode.VelocityChange);
+            rb.AddForce(moveVector.normalized * dashSpeed, ForceMode.VelocityChange);
             StartCoroutine(DashTimer());
         }
     }
@@ -88,9 +101,9 @@ public class PlayerMovement : MonoBehaviour
     private void CheckBounds()
     {
         RaycastHit hit;
-        if(Physics.Raycast(transform.position, movePos, 8f, groundMask))
+        if(Physics.Raycast(transform.position, moveVector, 8f, groundMask))
         {
-            movePos = Vector3.zero;
+            moveVector = Vector3.zero;
         }
     }
 }
