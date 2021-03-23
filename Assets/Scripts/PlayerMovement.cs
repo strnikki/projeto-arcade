@@ -4,129 +4,51 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     [SerializeField] float speed = 7f;
     [SerializeField] float gravity = -9.8f;
     [SerializeField] float jumpHeight = 3f;
-    [SerializeField] float dashSpeed = 100f;
-    [SerializeField] float dashTime = 0.01f;
+    [SerializeField] float dashDistance = 5f;
 
     [SerializeField] Transform groundCheck;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] LayerMask groundMask;
 
-    private CharacterController controller;
+    private Rigidbody rb;
 
-    private Vector3 velocity;
-    private Vector3 moveVector;
+    private Vector3 movePos;
     private bool isGrounded;
-    private bool hasDoubleJump = true;
-    private bool isDashing = false;
 
-    // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        
-        Move();
-        Jump();
-        DoubleJump();
-        Dash();
-        UpdateGravity();
-    }
 
-    private void Move()
-    {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
 
-        moveVector = transform.right * x + transform.forward * z;
-        moveVector = Vector3.ClampMagnitude(moveVector, 1f);
+        Vector3 inputs = Vector3.zero;
+        inputs.x = Input.GetAxis("Horizontal");
+        inputs.z = Input.GetAxis("Vertical");
 
-        if(!isGrounded)
+        movePos = transform.right * inputs.x + transform.forward * inputs.z;
+
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            //controller.Move(move * airSpeed * Time.deltaTime);
-            Vector3 newVelocity = velocity + moveVector * 2 * speed * Time.deltaTime;
-            if(newVelocity.magnitude < 7f)
-            {
-                velocity = newVelocity;
-            }
+            rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity), ForceMode.VelocityChange);
+            //rb.velocity = New Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
         }
-        else
+        if (Input.GetButtonDown("Dash"))
         {
-            controller.Move(moveVector * speed * Time.deltaTime);
+            Vector3 dashVelocity = Vector3.Scale(transform.forward, dashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime * rb.drag + 1)) / -Time.deltaTime), 0, (Mathf.Log(1f / (Time.deltaTime * rb.drag + 1)) / -Time.deltaTime)));
+            rb.AddForce(dashVelocity, ForceMode.VelocityChange);
         }
     }
 
-    private void Jump()
+
+    void FixedUpdate()
     {
-        if(Input.GetButtonDown("Jump") && isGrounded)
-        {
-            // Mantain ground momentum
-            velocity = moveVector * speed;
-
-            // v = sqrt(h * -2 * g) ??
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-    }
-
-    private void DoubleJump()
-    {
-        if(isGrounded || !hasDoubleJump)
-            return;
-
-        if(Input.GetButtonDown("Jump"))
-        {
-            hasDoubleJump = false;
-
-            if(moveVector.magnitude > 0f)
-                velocity = moveVector * speed;
-            else
-                velocity = controller.velocity;
-
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-    }
-
-    private void Dash()
-    {
-        if(isDashing)
-        {
-            controller.Move(moveVector.normalized * dashSpeed * Time.deltaTime);
-        }
-        else if (Input.GetButtonDown("Dash"))
-        {
-            velocity = Vector3.zero;
-            isDashing = true;
-            StartCoroutine(DashTimer());
-        }
-    }
-
-    IEnumerator DashTimer()
-    {
-        yield return new WaitForSeconds(dashTime);
-        isDashing = false;
-    }
-
-    private void UpdateGravity()
-    {
-        if(isGrounded && velocity.y < 0)
-        {
-            velocity = Vector3.zero;
-            velocity.y = -2f;
-            hasDoubleJump = true;
-        }
-        else
-        {
-            velocity.y += gravity * Time.deltaTime;
-        }
-        
-        controller.Move(velocity * Time.deltaTime);
+        rb.MovePosition(rb.position + movePos * speed * Time.fixedDeltaTime);
     }
 }
