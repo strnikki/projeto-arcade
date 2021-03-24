@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] LayerMask groundMask;
 
+    [SerializeField] bool canWallJump = true;
+
     private Rigidbody rb;
+    private PhysicMaterial physicMaterial;
 
     private Vector3 moveVector;
     private bool isGrounded;
@@ -34,12 +38,14 @@ public class PlayerMovement : MonoBehaviour
     private float climbProgress = 0f;
     private Vector3 climbDirection;
     private Vector3 jumpPos;
+    [SerializeField] float slowDownFactor = 0.05f;
 
     public bool hasHitLedge {get; set;}
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        physicMaterial = GetComponent<CapsuleCollider>().material;
     }
 
     void Update()
@@ -48,7 +54,10 @@ public class PlayerMovement : MonoBehaviour
 
         if(!isDashing && isGrounded)
             SetMovementVector();
+
         Jump();
+        ChangeMaterialProperties(); //Make player slide along walls when in air
+
         if(!isGrounded)
         {
             DoubleJump();
@@ -58,14 +67,16 @@ public class PlayerMovement : MonoBehaviour
         {
             hasDoubleJump = true;
         }
+
         Dash();
         CheckLedge();
         
         if(isDashing)
             CheckBounds();
 
-    }
 
+        SlowMotion();
+    }
 
     void FixedUpdate()
     {
@@ -95,6 +106,18 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity), ForceMode.VelocityChange);
             //rb.velocity = New Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+        }
+    }
+        
+    private void ChangeMaterialProperties()
+    {
+        if(isGrounded)
+        {
+            physicMaterial.frictionCombine = PhysicMaterialCombine.Average;
+        }
+        else
+        {
+            physicMaterial.frictionCombine = PhysicMaterialCombine.Minimum;
         }
     }
 
@@ -167,6 +190,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void SlowMotion()
+    {
+        if(Input.GetKey(KeyCode.E))
+        {
+            Time.timeScale = slowDownFactor;
+            Time.fixedDeltaTime = Time.timeScale * .02f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
+    }
+
     private void Climb()
     {
         if(isClimbing)
@@ -208,6 +244,14 @@ public class PlayerMovement : MonoBehaviour
         {
             hasHitLedge = true;
             SetObstacleProperties(other.transform.position, other.collider.bounds.extents.y);
+        }
+    }
+
+    private void OnCollisionStay(Collision other)
+    {
+        if(canWallJump)
+        {
+            hasDoubleJump = true;
         }
     }
 }
