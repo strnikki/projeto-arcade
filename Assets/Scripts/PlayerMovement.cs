@@ -81,18 +81,25 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         Move();
-        Climb();
+        //Climb();
         UpdateGravity();
     }
 
     private void SetMovementVector()
     {
+        Vector3 inputs = GetMovementVector();
+
+        moveVector = transform.right * inputs.x + transform.forward * inputs.z;
+        moveVector = Vector3.ClampMagnitude(moveVector, 1f);
+    }
+
+    private Vector3 GetMovementVector()
+    {
         Vector3 inputs = Vector3.zero;
         inputs.x = Input.GetAxis("Horizontal");
         inputs.z = Input.GetAxis("Vertical");
 
-        moveVector = transform.right * inputs.x + transform.forward * inputs.z;
-        moveVector = Vector3.ClampMagnitude(moveVector, 1f);
+        return inputs;
     }
 
     private void Move()
@@ -127,9 +134,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-            Vector3 inputs = Vector3.zero;
-            inputs.x = Input.GetAxisRaw("Horizontal");
-            inputs.z = Input.GetAxisRaw("Vertical");
+            Vector3 inputs = GetMovementVector();
 
             if(inputs != Vector3.zero)
                 SetMovementVector();
@@ -141,9 +146,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void AirMovement()
     {
-        Vector3 inputs = Vector3.zero;
-        inputs.x = Input.GetAxis("Horizontal");
-        inputs.z = Input.GetAxis("Vertical");
+        Vector3 inputs = GetMovementVector();
 
         Vector3 airMove = transform.right * inputs.x + transform.forward * inputs.z;
         moveVector += airMove * airSpeed * Time.deltaTime;
@@ -154,6 +157,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetButtonDown("Dash"))
         {
+            Vector3 inputs = GetMovementVector();
+
+            if(inputs != Vector3.zero)
+                SetMovementVector();
+
             isDashing = true;
             rb.drag = 8f;
             rb.AddForce(moveVector.normalized * dashSpeed, ForceMode.VelocityChange);
