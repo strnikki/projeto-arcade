@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float dashSpeed = 100f;
     [SerializeField] float dashDuration = 0.01f;
 
-
     [SerializeField] Transform groundCheck;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] LayerMask groundMask;
@@ -27,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool isDashing;
     private bool hasDoubleJump = true;
+    private bool isWallRunning = false;
 
     [SerializeField] float climbSpeed = 3f;
     private Vector3 obstaclePos;
@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     private float climbProgress = 0f;
     private Vector3 climbDirection;
     private Vector3 jumpPos;
+    private Vector3 wallRunDirection;
     [SerializeField] float slowDownFactor = 0.05f;
 
     public bool hasHitLedge {get; set;}
@@ -80,7 +81,10 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
+        if(!isWallRunning)
+            Move();
+        else
+            WallRun();
         //Climb();
         UpdateGravity();
     }
@@ -109,8 +113,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-         if(Input.GetButtonDown("Jump") && isGrounded)
+        if(Input.GetButtonDown("Jump") && (isGrounded || isWallRunning))
         {
+            isWallRunning = false;
             rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * gravity), ForceMode.VelocityChange);
             //rb.velocity = New Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
         }
@@ -177,6 +182,12 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = Vector3.zero;
     }
 
+    private void WallRun()
+    {
+        rb.MovePosition(rb.position + wallRunDirection * speed * Time.fixedDeltaTime);
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+    }
+
     private void CheckLedge()
     {
         if(hasHitLedge)
@@ -190,6 +201,7 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    // not working as intended (still clipping)
     private void CheckBounds()
     {
         if(Physics.Raycast(transform.position, moveVector, 8f, groundMask))
@@ -252,6 +264,24 @@ public class PlayerMovement : MonoBehaviour
         {
             hasHitLedge = true;
             SetObstacleProperties(other.transform.position, other.collider.bounds.extents.y);
+            if(!isGrounded)
+            {
+                setUpWallRun(other);
+            }
+        }
+    }
+
+    private void setUpWallRun(Collision other)
+    {
+        float angle = Vector3.Angle(other.contacts[0].normal, moveVector) - 90f;
+        if(angle < 60 && moveVector.magnitude > .7f)
+        {
+            isWallRunning = true;
+            wallRunDirection = Vector3.Cross(other.contacts[0].normal, Vector3.up);
+            if(Vector3.Angle(transform.forward, wallRunDirection) > 90)
+            {
+                wallRunDirection = -wallRunDirection;
+            }
         }
     }
 
@@ -260,6 +290,14 @@ public class PlayerMovement : MonoBehaviour
         if(canWallJump)
         {
             hasDoubleJump = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision other) 
+    {
+        if(LayerMask.LayerToName(other.gameObject.layer) == "Ground")
+        {
+            isWallRunning = false;
         }
     }
 }
