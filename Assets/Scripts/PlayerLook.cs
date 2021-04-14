@@ -8,8 +8,10 @@ public class PlayerLook : MonoBehaviour
 
     [SerializeField] float mouseSensitivity = 100f;
     [SerializeField] Transform playerBody;
+    [SerializeField] ParticleSystem sparks;
 
     private Animator gunAnimator;
+    private Camera cam;
 
     float xRotation = 0f;
 
@@ -18,6 +20,7 @@ public class PlayerLook : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         gunAnimator = GetComponentInChildren<Animator>();
+        cam = GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -40,6 +43,14 @@ public class PlayerLook : MonoBehaviour
         if(Input.GetButtonDown("Fire1"))
         {
             gunAnimator.SetTrigger("Shooting");
+            sparks.Play();
+            
+            RaycastHit hit;
+
+            if(Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, 1000f))
+            {
+                Debug.Log(hit.transform.name);
+            }
         }
     }
 }
