@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,12 +9,15 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] float mouseSensitivity = 100f;
     [SerializeField] Transform playerBody;
 
+    private Animator gunAnimator;
+
     float xRotation = 0f;
 
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        gunAnimator = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -27,5 +31,15 @@ public class PlayerLook : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up * mouseX);
+
+        Shoot();
+    }
+
+    private void Shoot()
+    {
+        if(Input.GetButtonDown("Fire1"))
+        {
+            gunAnimator.SetTrigger("Shooting");
+        }
     }
 }
