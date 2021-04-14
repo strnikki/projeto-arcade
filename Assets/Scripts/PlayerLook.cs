@@ -10,6 +10,8 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] Transform playerBody;
     [SerializeField] ParticleSystem sparks;
     [SerializeField] float shootingCooldown = .5f;
+    [SerializeField] float weaponDamage = 10f;
+    [SerializeField] float weaponImpact = 100f;
 
     private Animator gunAnimator;
     private Camera cam;
@@ -54,6 +56,12 @@ public class PlayerLook : MonoBehaviour
             if(Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, 1000f))
             {
                 Debug.Log(hit.transform.name);
+
+                Target target = hit.transform.GetComponent<Target>();
+                if(target != null)
+                {
+                    target.TakeDamage(transform.forward * weaponImpact, weaponDamage);
+                }
             }
         }
     }
