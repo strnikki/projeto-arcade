@@ -9,11 +9,13 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] float mouseSensitivity = 100f;
     [SerializeField] Transform playerBody;
     [SerializeField] ParticleSystem sparks;
+    [SerializeField] float shootingCooldown = .5f;
 
     private Animator gunAnimator;
     private Camera cam;
 
-    float xRotation = 0f;
+    private float xRotation = 0f;
+    private bool canShoot = true;
 
     // Start is called before the first frame update
     void Start()
@@ -40,10 +42,12 @@ public class PlayerLook : MonoBehaviour
 
     private void Shoot()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if(Input.GetButtonDown("Fire1") && canShoot)
         {
             gunAnimator.SetTrigger("Shooting");
             sparks.Play();
+            canShoot = false;
+            StartCoroutine(ShootTimer());
             
             RaycastHit hit;
 
@@ -52,5 +56,11 @@ public class PlayerLook : MonoBehaviour
                 Debug.Log(hit.transform.name);
             }
         }
+    }
+
+    IEnumerator ShootTimer()
+    {
+        yield return new WaitForSeconds(shootingCooldown);
+        canShoot = true;
     }
 }
