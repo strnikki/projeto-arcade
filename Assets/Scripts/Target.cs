@@ -22,6 +22,13 @@ public class Target : MonoBehaviour
         {
             rb.AddForce(dir, ForceMode.Impulse);
             Destroy(this.gameObject, despawnTimer);
+
+            Enemy enemyScript = this.GetComponent<Enemy>();
+            if(enemyScript != null)
+            {
+                enemyScript.Die();
+            }
+            // Make player case
         }
     }
     
