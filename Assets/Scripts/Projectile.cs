@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] float speed = 1f;
+    [SerializeField] float projectileImpact = 1f;
 
     private Rigidbody rb;
 
@@ -27,9 +28,14 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if(LayerMask.LayerToName(other.gameObject.layer) != "Enemy")
+        if(LayerMask.LayerToName(other.gameObject.layer) != "Ground")
         {
+            other.gameObject.GetComponent<Target>().TakeDamage(transform.forward * projectileImpact, 10);
             Debug.Log(other.gameObject.name);
+            Destroy(this.gameObject);
+        }
+        else 
+        {
             Destroy(this.gameObject);
         }
     }

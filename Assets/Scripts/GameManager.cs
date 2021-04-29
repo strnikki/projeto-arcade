@@ -2,21 +2,81 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] TMP_Text scoreText;
+    [SerializeField] GameObject gameOverScreen;
+    [SerializeField] GameObject pauseScreen;
+
+    private Player player;
+
+    private int score = 0;
+    private bool isPaused = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        scoreText.text = "Score: 0";
+        Cursor.lockState = CursorLockMode.Locked;
+
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("SampleScene");
+            if(isPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
         }
+    }
+
+    private void Pause()
+    {
+        player.StopScripts();
+        pauseScreen.SetActive(true);
+        isPaused = true;
+        Time.timeScale = 0;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void Resume()
+    {
+        player.StartScripts();
+        pauseScreen.SetActive(false);
+        isPaused = false;
+        Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void UpdateScore(int points)
+    {
+        score += points;
+        scoreText.text = "Score: " + score;
+    }
+
+    public void ShowGameOverScreen()
+    {
+        gameOverScreen.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void Retry()
+    {
+        SceneManager.LoadScene("MainScene");
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 }

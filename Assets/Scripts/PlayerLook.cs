@@ -2,16 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerLook : MonoBehaviour
 {
 
-    [SerializeField] float mouseSensitivity = 100f;
+    [SerializeField] float mouseSensitivity = 50f;
     [SerializeField] Transform playerBody;
     [SerializeField] ParticleSystem sparks;
     [SerializeField] float shootingCooldown = .5f;
-    [SerializeField] float weaponDamage = 10f;
     [SerializeField] float weaponImpact = 100f;
+
+    [SerializeField] int weaponDamage = 10;
+
+    [SerializeField] Slider sensitivitySlider;
+    [SerializeField] TMP_Text sensitivityText;
 
     private Animator gunAnimator;
     private Camera cam;
@@ -22,9 +28,9 @@ public class PlayerLook : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         gunAnimator = GetComponentInChildren<Animator>();
         cam = GetComponent<Camera>();
+        sensitivitySlider.value = mouseSensitivity;
     }
 
     // Update is called once per frame
@@ -70,5 +76,11 @@ public class PlayerLook : MonoBehaviour
     {
         yield return new WaitForSeconds(shootingCooldown);
         canShoot = true;
+    }
+
+    public void UpdateSensitivity()
+    {
+        mouseSensitivity = sensitivitySlider.value;
+        sensitivityText.text = "" + mouseSensitivity;
     }
 }

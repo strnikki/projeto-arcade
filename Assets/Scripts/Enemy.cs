@@ -13,6 +13,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float shootingCooldown = 1f;
 
+    [SerializeField] float health = 10;
+
+    private GameManager gameManager;
     
     private Transform player;
     private Rigidbody rb;
@@ -24,6 +27,7 @@ public class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         player = GameObject.Find("Player").transform;
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -77,9 +81,25 @@ public class Enemy : MonoBehaviour
         canShoot = true;
     }
 
-    public void Die()
+    public void TakeDamage(Vector3 impactForce, int damage)
+    {
+        health -= damage;
+        //rb.AddForce(impactForce, ForceMode.Impulse);
+
+        if(health <= 0)
+        {
+            Die(impactForce);
+        }
+    }
+
+    private void Die(Vector3 impactForce)
     {
         rb.constraints = RigidbodyConstraints.None;
+        rb.AddForce(impactForce, ForceMode.Impulse);
         alive = false;
+
+        gameManager.UpdateScore(1);
+
+        Destroy(this.gameObject, 1f);
     }
 }
