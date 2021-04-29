@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int health = 100;
-
     [SerializeField] HealthBar healthBar;
     [SerializeField] GameObject gun;
-
 
     private PlayerMovement playerMovement;
     private PlayerLook playerLook;
     private GameManager gameManager;
     private Rigidbody rb;
     
+    public int health = 100;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,13 +21,6 @@ public class Player : MonoBehaviour
         playerLook = GetComponentInChildren<PlayerLook>();
         playerMovement = GetComponentInChildren<PlayerMovement>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void TakeDamage(Vector3 impactForce, int damage)
@@ -37,6 +29,7 @@ public class Player : MonoBehaviour
 
         if(health <= 0)
         {
+            // Avoid negative health
             health = 0;
             
             Die();

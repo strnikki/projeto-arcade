@@ -5,20 +5,19 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] float minDistance;
+    [SerializeField] float speed;
+    [SerializeField] float shootingCooldown = 1f;
+    [SerializeField] float health = 10;
+
     [SerializeField] Transform projectile;
     [SerializeField] Transform gun;
     [SerializeField] Transform gunBarrel;
 
-    [SerializeField] float minDistance;
-    [SerializeField] float speed;
-    [SerializeField] float shootingCooldown = 1f;
-
-    [SerializeField] float health = 10;
-
     private GameManager gameManager;
-    
     private Transform player;
     private Rigidbody rb;
+    
     private bool canShoot = true;
     private bool alive = true;
 
@@ -35,9 +34,7 @@ public class Enemy : MonoBehaviour
     {
         if(alive)
         {
-            Vector3 target = new Vector3(player.position.x, transform.position.y, player.position.z);
-            transform.LookAt(target);
-            gun.transform.LookAt(player.position);
+            EnemyLook();
         }
     }
 
@@ -45,22 +42,34 @@ public class Enemy : MonoBehaviour
     {
         if(alive)
         {
-            Vector3 enemyHorizPos = new Vector3(transform.position.x, 0, transform.position.z);
-            Vector3 playerHorizPos = new Vector3(player.position.x, 0, player.position.z);
+            EnemyMove();
+        }
+    }
 
-            //Refactor to use nav mesh
-            Vector3 direction = (player.position - transform.position).normalized;
-            
-            if(Vector3.Distance(enemyHorizPos, playerHorizPos) > minDistance)
+    private void EnemyLook()
+    {
+        Vector3 target = new Vector3(player.position.x, transform.position.y, player.position.z);
+        transform.LookAt(target);
+        gun.transform.LookAt(player.position);
+    }
+
+    private void EnemyMove()
+    {
+        Vector3 enemyHorizPos = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 playerHorizPos = new Vector3(player.position.x, 0, player.position.z);
+
+        //Refactor to use nav mesh
+        Vector3 direction = (player.position - transform.position).normalized;
+        
+        if(Vector3.Distance(enemyHorizPos, playerHorizPos) > minDistance)
+        {
+            rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
+        }
+        else 
+        {
+            if(canShoot)
             {
-                rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
-            }
-            else 
-            {
-                if(canShoot)
-                {
-                    Shoot();
-                }
+                Shoot();
             }
         }
     }

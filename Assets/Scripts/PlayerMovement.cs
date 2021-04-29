@@ -12,34 +12,35 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpHeight = 3f;
     [SerializeField] float dashSpeed = 100f;
     [SerializeField] float dashDuration = 0.01f;
-
-    [SerializeField] Transform groundCheck;
+    [SerializeField] float slowDownFactor = 0.05f;
     [SerializeField] float groundDistance = 0.4f;
-    [SerializeField] LayerMask groundMask;
-
+    [SerializeField] float climbSpeed = 3f;
+    
     [SerializeField] bool canWallJump = true;
 
-    private Rigidbody rb;
-    private PhysicMaterial physicMaterial;
+    [SerializeField] Transform groundCheck;
+    [SerializeField] LayerMask groundMask;
 
     private Vector3 moveVector;
+    private Vector3 obstaclePos;
+    private Vector3 distanceFromObstacle;
+    private Vector3 climbStartPos;
+    private Vector3 climbEndPos;
+    private Vector3 climbDirection;
+    private Vector3 jumpPos;
+    private Vector3 wallRunDirection;
+
     private bool isGrounded;
     private bool isDashing;
     private bool hasDoubleJump = true;
     private bool isWallRunning = false;
-
-    [SerializeField] float climbSpeed = 3f;
-    private Vector3 obstaclePos;
-    private float obstacleHeight;
-    private Vector3 distanceFromObstacle;
-    private Vector3 climbStartPos;
-    private Vector3 climbEndPos;
     private bool isClimbing = false;
+
+    private float obstacleHeight;
     private float climbProgress = 0f;
-    private Vector3 climbDirection;
-    private Vector3 jumpPos;
-    private Vector3 wallRunDirection;
-    [SerializeField] float slowDownFactor = 0.05f;
+    
+    private Rigidbody rb;
+    private PhysicMaterial physicMaterial;
 
     public bool hasHitLedge {get; set;}
 
@@ -51,13 +52,18 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Check if player is grounded by drawing a sphere on the player's feet
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
+        // Cannot change direction mid dash.
+        // The movement for when in air is managed by another function below
         if(!isDashing && isGrounded)
             SetMovementVector();
 
         Jump();
-        ChangeMaterialProperties(); //Make player slide along walls when in air
+
+        //Make player slide along walls when in air
+        ChangeMaterialProperties(); 
 
         if(!isGrounded)
         {
@@ -70,11 +76,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Dash();
-        CheckLedge();
+        //CheckLedge();
         
         if(isDashing)
             CheckBounds();
-
 
         SlowMotion();
     }
@@ -93,7 +98,10 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 inputs = GetMovementVector();
 
+        // Rotate the input in relation to player direction
         moveVector = transform.right * inputs.x + transform.forward * inputs.z;
+
+        // Limit vector magnitude to 1 so that diagonals don't make the player go faster
         moveVector = Vector3.ClampMagnitude(moveVector, 1f);
     }
 
@@ -139,8 +147,10 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+            // Get input again so player can change directions when double jumping
             Vector3 inputs = GetMovementVector();
 
+            // But if player isn't pressing anything just keep the same direction as before
             if(inputs != Vector3.zero)
                 SetMovementVector();
 
@@ -154,7 +164,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 inputs = GetMovementVector();
 
         Vector3 airMove = transform.right * inputs.x + transform.forward * inputs.z;
+
+        // Use acceleration to move instead to simulate inertia
         moveVector += airMove * airSpeed * Time.deltaTime;
+
         moveVector = Vector3.ClampMagnitude(moveVector, 1f);
     }
 
@@ -168,8 +181,11 @@ public class PlayerMovement : MonoBehaviour
                 SetMovementVector();
 
             isDashing = true;
+
+            // Adds "air resistance" so the player decelerates naturally
             rb.drag = 8f;
             rb.AddForce(moveVector.normalized * dashSpeed, ForceMode.VelocityChange);
+
             StartCoroutine(DashTimer());
         }
     }
@@ -188,6 +204,7 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
     }
 
+    // Not working correctly
     private void CheckLedge()
     {
         if(hasHitLedge)
@@ -242,6 +259,8 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(Vector3.up * gravity * gravityScale, ForceMode.Acceleration);
     }
 
+
+    // Don't worry about this, it's for the climbing
     public void SetObstacleProperties(Vector3 obstaclePos, float obstacleHeight)
     {
         this.obstaclePos = obstaclePos;
@@ -273,6 +292,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void setUpWallRun(Collision other)
     {
+        // Only wallrun if the player hit the wall at certain angles
         float angle = Vector3.Angle(other.contacts[0].normal, moveVector) - 90f;
         if(angle < 60 && moveVector.magnitude > .7f)
         {

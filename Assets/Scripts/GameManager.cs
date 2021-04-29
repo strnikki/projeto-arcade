@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         scoreText.text = "Score: 0";
+
+        // Impede o cursor de sair da tela
         Cursor.lockState = CursorLockMode.Locked;
 
         player = GameObject.Find("Player").GetComponent<Player>();

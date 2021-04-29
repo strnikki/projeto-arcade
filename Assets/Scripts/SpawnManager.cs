@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] GameObject enemy;
-    [SerializeField] EnemySpawn[] spawnPoints;
+    [SerializeField] Transform[] spawnPoints;
 
     private float timeElapsed;
 

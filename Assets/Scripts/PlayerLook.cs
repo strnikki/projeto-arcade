@@ -9,21 +9,22 @@ public class PlayerLook : MonoBehaviour
 {
 
     [SerializeField] float mouseSensitivity = 50f;
-    [SerializeField] Transform playerBody;
-    [SerializeField] ParticleSystem sparks;
     [SerializeField] float shootingCooldown = .5f;
     [SerializeField] float weaponImpact = 100f;
 
     [SerializeField] int weaponDamage = 10;
 
+    [SerializeField] Transform playerBody;
+    [SerializeField] ParticleSystem sparks;
     [SerializeField] Slider sensitivitySlider;
     [SerializeField] TMP_Text sensitivityText;
+
+    private float xRotation = 0f;
+    private bool canShoot = true;
 
     private Animator gunAnimator;
     private Camera cam;
 
-    private float xRotation = 0f;
-    private bool canShoot = true;
 
     // Start is called before the first frame update
     void Start()

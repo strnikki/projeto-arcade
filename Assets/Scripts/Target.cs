@@ -13,7 +13,6 @@ public class Target : MonoBehaviour
 
     public void TakeDamage(Vector3 impactForce, int damage)
     {
-        Debug.Log("entrou");
         switch (this.tag)
         {
             case "Player":
@@ -26,8 +25,6 @@ public class Target : MonoBehaviour
                 this.GetComponent<Shootable>().TakeDamage(impactForce, damage);
                 break;
         }
-    
-
     }
     
 }
