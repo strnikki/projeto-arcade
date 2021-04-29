@@ -11,9 +11,6 @@ public class Projectile : MonoBehaviour
 
     public Vector3 target { get; set; }
 
-
-    
-    
     // Start is called before the first frame update
     void Start()
     {

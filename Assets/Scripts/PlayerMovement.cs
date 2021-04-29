@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpHeight = 3f;
     [SerializeField] float dashSpeed = 100f;
     [SerializeField] float dashDuration = 0.01f;
+    [SerializeField] float dashCooldown = 1f;
     [SerializeField] float slowDownFactor = 0.05f;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] float climbSpeed = 3f;
@@ -35,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     private bool hasDoubleJump = true;
     private bool isWallRunning = false;
     private bool isClimbing = false;
+    private bool canDash = true;
 
     private float obstacleHeight;
     private float climbProgress = 0f;
@@ -173,8 +175,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash()
     {
-        if (Input.GetButtonDown("Dash"))
+        if (Input.GetButtonDown("Dash") && canDash)
         {
+            canDash = false;
+
             Vector3 inputs = GetMovementVector();
 
             if(inputs != Vector3.zero)
@@ -196,6 +200,14 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
         rb.drag = 1f;
         rb.velocity = Vector3.zero;
+
+        StartCoroutine(DashCooldown());
+    }
+
+    IEnumerator DashCooldown()
+    {
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 
     private void WallRun()
