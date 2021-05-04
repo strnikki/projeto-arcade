@@ -2237,11 +2237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 500
-  shootingCooldown: 0.5
-  weaponImpact: 100
-  weaponDamage: 10
   playerBody: {fileID: 981003996}
-  sparks: {fileID: 1328836035}
   sensitivitySlider: {fileID: 959890388}
   sensitivityText: {fileID: 1378720635}
 --- !u!81 &930569531
@@ -2571,6 +2567,7 @@ MonoBehaviour:
   jumpHeight: 4
   dashSpeed: 100
   dashDuration: 0.1
+  dashCooldown: 1
   slowDownFactor: 0.5
   groundDistance: 0.4
   climbSpeed: 10
@@ -3684,6 +3681,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1232498757}
   - component: {fileID: 1232498758}
+  - component: {fileID: 1232498759}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -3725,6 +3723,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1232498759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232498756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc6f2a6fd5823e646b2a42eba957ccf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponDamage: 10
+  weaponImpact: 100
+  shootingCooldown: 0.5
+  sparks: {fileID: 1328836035}
 --- !u!1 &1259521188
 GameObject:
   m_ObjectHideFlags: 0

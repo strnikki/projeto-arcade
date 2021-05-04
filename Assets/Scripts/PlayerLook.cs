@@ -9,27 +9,19 @@ public class PlayerLook : MonoBehaviour
 {
 
     [SerializeField] float mouseSensitivity = 50f;
-    [SerializeField] float shootingCooldown = .5f;
-    [SerializeField] float weaponImpact = 100f;
-
-    [SerializeField] int weaponDamage = 10;
 
     [SerializeField] Transform playerBody;
-    [SerializeField] ParticleSystem sparks;
     [SerializeField] Slider sensitivitySlider;
     [SerializeField] TMP_Text sensitivityText;
 
     private float xRotation = 0f;
-    private bool canShoot = true;
 
-    private Animator gunAnimator;
     private Camera cam;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        gunAnimator = GetComponentInChildren<Animator>();
         cam = GetComponent<Camera>();
         sensitivitySlider.value = mouseSensitivity;
     }
@@ -45,38 +37,6 @@ public class PlayerLook : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up * mouseX);
-
-        Shoot();
-    }
-
-    private void Shoot()
-    {
-        if(Input.GetButtonDown("Fire1") && canShoot)
-        {
-            gunAnimator.SetTrigger("Shooting");
-            sparks.Play();
-            canShoot = false;
-            StartCoroutine(ShootTimer());
-            
-            RaycastHit hit;
-
-            if(Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, 1000f))
-            {
-                Debug.Log(hit.transform.name);
-
-                Target target = hit.transform.GetComponent<Target>();
-                if(target != null)
-                {
-                    target.TakeDamage(transform.forward * weaponImpact, weaponDamage);
-                }
-            }
-        }
-    }
-
-    IEnumerator ShootTimer()
-    {
-        yield return new WaitForSeconds(shootingCooldown);
-        canShoot = true;
     }
 
     public void UpdateSensitivity()

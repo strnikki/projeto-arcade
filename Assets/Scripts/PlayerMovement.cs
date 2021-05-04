@@ -43,11 +43,15 @@ public class PlayerMovement : MonoBehaviour
     
     private Rigidbody rb;
     private PhysicMaterial physicMaterial;
+    private Gun gun;
+    private Camera cam;
 
     public bool hasHitLedge {get; set;}
 
     void Start()
     {
+        gun = GetComponentInChildren<Gun>();
+        cam = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
         physicMaterial = GetComponent<CapsuleCollider>().material;
     }
@@ -84,6 +88,8 @@ public class PlayerMovement : MonoBehaviour
             CheckBounds();
 
         SlowMotion();
+
+        Shoot();
     }
 
     void FixedUpdate()
@@ -271,6 +277,13 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(Vector3.up * gravity * gravityScale, ForceMode.Acceleration);
     }
 
+    private void Shoot()
+    {
+        if(Input.GetButtonDown("Fire1"))
+        {
+            gun.Shoot(cam.transform);
+        }
+    }
 
     // Don't worry about this, it's for the climbing
     public void SetObstacleProperties(Vector3 obstaclePos, float obstacleHeight)

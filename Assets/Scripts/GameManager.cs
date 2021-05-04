@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private int score = 0;
     private bool isPaused = false;
+    private bool isGameOver = false;
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape) && !isGameOver)
         {
             if(isPaused)
             {
@@ -70,11 +71,13 @@ public class GameManager : MonoBehaviour
     {
         gameOverScreen.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
+        isGameOver = true;
+        Time.timeScale = 0;
     }
 
     public void Retry()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("PrototypeScene");
     }
 
     public void Exit()
