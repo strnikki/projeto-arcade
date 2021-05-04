@@ -6,12 +6,15 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] GameObject enemy;
     [SerializeField] Transform[] spawnPoints;
+    [SerializeField] float spawnCooldown = 1f;
+    [SerializeField] float startDelay = 3f;
 
     private float timeElapsed;
 
+    
     private void Start()
     {
-        Invoke("SpawnEnemy", 3f);
+        Invoke("SpawnEnemy", startDelay);
     }
 
     private void SpawnEnemy()
@@ -20,6 +23,6 @@ public class SpawnManager : MonoBehaviour
 
         Instantiate(enemy, spawnPoints[index].transform.position, enemy.transform.rotation);
 
-        Invoke("SpawnEnemy", 1f);
+        Invoke("SpawnEnemy", spawnCooldown);
     }
 }
