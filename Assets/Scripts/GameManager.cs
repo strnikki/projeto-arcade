@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         player = GameObject.Find("Player").GetComponent<Player>();
+
+        AudioManager.instance.Play("Stage One Theme");
     }
 
     void Update()
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     private void Pause()
     {
+        AudioManager.instance.Pause("Stage One Theme");
         player.StopScripts();
         pauseScreen.SetActive(true);
         isPaused = true;
@@ -54,6 +57,7 @@ public class GameManager : MonoBehaviour
 
     private void Resume()
     {
+        AudioManager.instance.Play("Stage One Theme");
         player.StartScripts();
         pauseScreen.SetActive(false);
         isPaused = false;
@@ -69,6 +73,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowGameOverScreen()
     {
+        AudioManager.instance.Stop("Stage One Theme");
         gameOverScreen.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         isGameOver = true;
