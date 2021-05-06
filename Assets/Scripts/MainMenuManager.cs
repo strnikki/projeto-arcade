@@ -10,6 +10,7 @@ public class MainMenuManager : MonoBehaviour
     {
         AudioManager.instance.Play("Main Menu Theme");
     }
+    
     public void StartGame()
     {
         AudioManager.instance.Stop("Main Menu Theme");
