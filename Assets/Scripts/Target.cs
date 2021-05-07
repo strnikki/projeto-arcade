@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    [SerializeField] float health = 10f;
-    [SerializeField] float despawnTimer = 2f;
-
     private Rigidbody rb;
     
     private void Start()
@@ -14,21 +11,19 @@ public class Target : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void TakeDamage(Vector3 dir, float damage)
+    public void TakeDamage(Vector3 impactForce, int damage)
     {
-        health -= damage;
-        
-        if(health <= 0)
+        switch (this.tag)
         {
-            rb.AddForce(dir, ForceMode.Impulse);
-            Destroy(this.gameObject, despawnTimer);
-
-            Enemy enemyScript = this.GetComponent<Enemy>();
-            if(enemyScript != null)
-            {
-                enemyScript.Die();
-            }
-            // Make player case
+            case "Player":
+                this.GetComponent<Player>().TakeDamage(impactForce, damage);
+                break;
+            case "Enemy":
+                this.GetComponent<Enemy>().TakeDamage(impactForce, damage);
+                break;
+            case "Shootable":
+                this.GetComponent<Shootable>().TakeDamage(impactForce, damage);
+                break;
         }
     }
     
