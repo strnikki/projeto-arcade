@@ -25,6 +25,7 @@ public class Gun : MonoBehaviour
         if(canShoot)
         {
             gunAnimator.SetTrigger("Shooting");
+            AudioManager.instance.Play("TiroUnicoPolvora");
             sparks.Play();
             canShoot = false;
             StartCoroutine(ShootTimer());
