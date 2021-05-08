@@ -5,24 +5,41 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] GameObject enemy;
-    [SerializeField] Transform[] spawnPoints;
+    [SerializeField] Transform spawnPointsObject;
     [SerializeField] float spawnCooldown = 1f;
     [SerializeField] float startDelay = 3f;
+    
 
     private float timeElapsed;
+    private Transform[] spawnPoints;
+    private bool spawnEnabled = false;
 
     
     private void Start()
     {
-        Invoke("SpawnEnemy", startDelay);
+        
+        spawnPoints = spawnPointsObject.GetComponentsInChildren<Transform>();
     }
 
     private void SpawnEnemy()
     {
+        Debug.Log("Spawning " + this.gameObject.name);
         int index = Random.Range(0, spawnPoints.Length - 1);
 
         Instantiate(enemy, spawnPoints[index].transform.position, enemy.transform.rotation);
 
-        Invoke("SpawnEnemy", spawnCooldown);
+        if(spawnEnabled)
+            Invoke("SpawnEnemy", spawnCooldown);
+    }
+
+    public void StartSpawning()
+    {
+        spawnEnabled = true;
+        Invoke("SpawnEnemy", startDelay);
+    }
+
+    public void StopSpawning()
+    {
+        spawnEnabled = false;
     }
 }

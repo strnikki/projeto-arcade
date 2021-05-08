@@ -10,12 +10,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text scoreText;
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] GameObject pauseScreen;
+    [SerializeField] SpawnManager[] spawnManagers;
 
     private Player player;
 
     private int score = 0;
     private bool isPaused = false;
     private bool isGameOver = false;
+    private int currentArea = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,8 @@ public class GameManager : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Player>();
 
         AudioManager.instance.Play("Stage One Theme");
+
+        spawnManagers[0].StartSpawning();
     }
 
     void Update()
@@ -71,6 +75,11 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Score: " + score;
     }
 
+    private void StageComplete()
+    {
+        
+    }
+
     public void ShowGameOverScreen()
     {
         AudioManager.instance.Stop("Stage One Theme");
@@ -82,11 +91,27 @@ public class GameManager : MonoBehaviour
 
     public void Retry()
     {
-        SceneManager.LoadScene("PrototypeScene");
+        SceneManager.LoadScene("MainScene");
     }
 
     public void Exit()
     {
         Application.Quit();
+    }
+
+    public void ChangePlayerArea()
+    {
+        if(currentArea == 1)
+        {
+            currentArea = 2;
+            spawnManagers[0].StopSpawning();
+            spawnManagers[1].StartSpawning();
+        }
+        else 
+        {
+            currentArea = 1;
+            spawnManagers[1].StopSpawning();
+            spawnManagers[0].StartSpawning();
+        }
     }
 }
