@@ -56,3 +56,9 @@ MonoBehaviour:
     pitch: 1
     loop: 1
     source: {fileID: 0}
+  - name: TiroUnicoPolvora
+    clip: {fileID: 8300000, guid: 38d0d36116bb74741808a4c90da08571, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}

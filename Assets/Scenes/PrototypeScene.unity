@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17276844, g: 0.21589246, b: 0.2978263, a: 1}
+  m_IndirectSpecularColor: {r: 0.17276807, g: 0.21589197, b: 0.29782572, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 285f49f6f941d874cbafad675ecdaf16, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: 40821b0740f011b4799ced302b8054d8, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -7974,30 +7974,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6806294044113042324, guid: 7323ae6e01c054c44aba78f92e6f3276, type: 3}
-      propertyPath: sounds.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6806294044113042324, guid: 7323ae6e01c054c44aba78f92e6f3276, type: 3}
-      propertyPath: sounds.Array.data[2].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 38d0d36116bb74741808a4c90da08571, type: 3}
-    - target: {fileID: 6806294044113042324, guid: 7323ae6e01c054c44aba78f92e6f3276, type: 3}
-      propertyPath: sounds.Array.data[2].loop
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6806294044113042324, guid: 7323ae6e01c054c44aba78f92e6f3276, type: 3}
-      propertyPath: sounds.Array.data[2].name
-      value: TiroUnicoPolvora
-      objectReference: {fileID: 0}
-    - target: {fileID: 6806294044113042324, guid: 7323ae6e01c054c44aba78f92e6f3276, type: 3}
-      propertyPath: sounds.Array.data[2].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6806294044113042324, guid: 7323ae6e01c054c44aba78f92e6f3276, type: 3}
-      propertyPath: sounds.Array.data[2].volume
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6806294044113042325, guid: 7323ae6e01c054c44aba78f92e6f3276, type: 3}
       propertyPath: m_RootOrder
       value: 0
