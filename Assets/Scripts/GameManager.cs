@@ -15,8 +15,10 @@ public class GameManager : MonoBehaviour
     private Player player;
 
     private int score = 0;
+    private int maxScore = 0;
     private bool isPaused = false;
     private bool isGameOver = false;
+    private bool stageCompleteMessage = false;
     private int currentArea = 1;
 
     // Start is called before the first frame update
@@ -29,9 +31,16 @@ public class GameManager : MonoBehaviour
 
         player = GameObject.Find("Player").GetComponent<Player>();
 
-        AudioManager.instance.Play("Stage One Theme");
+        if (SceneManager.GetActiveScene().name == "MainScene")
+        {
+            maxScore = 20;
+        }
+        else
+        {
+            maxScore = 50;
+        }
 
-        spawnManagers[0].StartSpawning();
+        AudioManager.instance.Play("Stage One Theme");
     }
 
     void Update()
@@ -71,13 +80,26 @@ public class GameManager : MonoBehaviour
 
     public void UpdateScore(int points)
     {
+        if(stageCompleteMessage)
+            return;
         score += points;
         scoreText.text = "Score: " + score;
+
+        if(score == maxScore)
+            StageComplete();
     }
 
     private void StageComplete()
     {
-        
+        scoreText.text = "STAGE COMPLETE";
+        stageCompleteMessage = true;
+        StartCoroutine(StageTransitionCooldown());
+    }
+
+    IEnumerator StageTransitionCooldown()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("PrototypeScene");
     }
 
     public void ShowGameOverScreen()
@@ -91,7 +113,7 @@ public class GameManager : MonoBehaviour
 
     public void Retry()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void Exit()
@@ -105,13 +127,17 @@ public class GameManager : MonoBehaviour
         {
             currentArea = 2;
             spawnManagers[0].StopSpawning();
-            spawnManagers[1].StartSpawning();
+            spawnManagers[1].StopSpawning();
+            spawnManagers[2].StartSpawning();
+            spawnManagers[3].StartSpawning();
         }
         else 
         {
             currentArea = 1;
-            spawnManagers[1].StopSpawning();
             spawnManagers[0].StartSpawning();
+            spawnManagers[1].StartSpawning();
+            spawnManagers[2].StopSpawning();
+            spawnManagers[3].StopSpawning();
         }
     }
 }

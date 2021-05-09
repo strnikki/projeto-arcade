@@ -8,16 +8,17 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] Transform spawnPointsObject;
     [SerializeField] float spawnCooldown = 1f;
     [SerializeField] float startDelay = 3f;
+    [SerializeField] bool spawnEnabled = false;
     
 
     private float timeElapsed;
     private Transform[] spawnPoints;
-    private bool spawnEnabled = false;
 
     
     private void Start()
     {
-        
+        if(spawnEnabled)
+            Invoke("SpawnEnemy", startDelay);
         spawnPoints = spawnPointsObject.GetComponentsInChildren<Transform>();
     }
 
