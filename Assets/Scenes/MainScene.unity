@@ -14193,11 +14193,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5179588209269450003, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 5179588209269450003, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5179588209778828845, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5179588209778828845, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
+      propertyPath: m_MaxValue
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5179588209778828845, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -14217,7 +14225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5179588210194377317, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 5179588210194377317, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14225,7 +14233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5179588210194377317, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 5179588210727700736, guid: 97bfa23aeb067ac479209ab1d7e596dd, type: 3}
       propertyPath: m_Name
@@ -15038,6 +15046,14 @@ PrefabInstance:
     - target: {fileID: 2046635936218337966, guid: db7f57ab20755d249bb91997ee015f9d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046635936218337966, guid: db7f57ab20755d249bb91997ee015f9d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2046635936618229945, guid: db7f57ab20755d249bb91997ee015f9d, type: 3}
+      propertyPath: m_Value
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2046635936618229947, guid: db7f57ab20755d249bb91997ee015f9d, type: 3}
       propertyPath: m_Pivot.x
