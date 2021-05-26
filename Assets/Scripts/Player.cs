@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] HealthBar healthBar;
+    [SerializeField] Image damageOverlay;
     [SerializeField] GameObject gun;
 
     private PlayerMovement playerMovement;
@@ -26,6 +28,9 @@ public class Player : MonoBehaviour
     public void TakeDamage(Vector3 impactForce, int damage)
     {
         health -= damage;
+        damageOverlay.color = new Color(1f, 0f, 0f, 1f);
+        damageOverlay.CrossFadeAlpha(.45f, 0, false);
+        damageOverlay.CrossFadeAlpha(0, .5f, false);
 
         if(health <= 0)
         {
