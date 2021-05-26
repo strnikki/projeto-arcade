@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform gun;
     [SerializeField] Transform gunBarrel;
 
+    [SerializeField] ParticleSystem blood;
+
     private GameManager gameManager;
     private Transform player;
     private Rigidbody rb;
@@ -93,6 +95,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(Vector3 impactForce, int damage)
     {
         health -= damage;
+        blood.Play();
         //rb.AddForce(impactForce, ForceMode.Impulse);
 
         if(health <= 0)
