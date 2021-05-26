@@ -1017,6 +1017,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7982033832260726366, guid: 56517096b21859a48a08ec9131a4802a, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7982033832310431167, guid: 56517096b21859a48a08ec9131a4802a, type: 3}
       propertyPath: sensitivityText
       value: 
