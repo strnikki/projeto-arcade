@@ -12,7 +12,7 @@ public class PlayerLook : MonoBehaviour
 
     [SerializeField] Transform playerBody;
     [SerializeField] Slider sensitivitySlider;
-    [SerializeField] TMP_Text sensitivityText;
+    [SerializeField] TMP_Text sensitivityValue;
 
     private float xRotation = 0f;
 
@@ -42,6 +42,6 @@ public class PlayerLook : MonoBehaviour
     public void UpdateSensitivity()
     {
         mouseSensitivity = sensitivitySlider.value;
-        sensitivityText.text = "" + mouseSensitivity;
+        sensitivityValue.text = "" + mouseSensitivity;
     }
 }

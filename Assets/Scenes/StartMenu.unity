@@ -1626,8 +1626,8 @@ MonoBehaviour:
   f_Toggle: {fileID: 408400814}
   volumeSlider: {fileID: 3154356028757318727}
   volumeText: {fileID: 3154356027028817128}
-  mainMenu: {fileID: 0}
-  optionsMenu: {fileID: 0}
+  mainMenu: {fileID: 1812683061}
+  optionsMenu: {fileID: 94275526}
 --- !u!1 &1139200518
 GameObject:
   m_ObjectHideFlags: 0
