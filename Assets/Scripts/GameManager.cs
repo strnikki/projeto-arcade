@@ -33,11 +33,11 @@ public class GameManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "MainScene")
         {
-            maxScore = 20;
+            maxScore = 10;
         }
         else
         {
-            maxScore = 50;
+            maxScore = 20;
         }
 
         AudioManager.instance.Play("Stage One Theme");
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
     IEnumerator StageTransitionCooldown()
     {
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene("PrototypeScene");
+        SceneManager.LoadScene("Scene2");
     }
 
     public void ShowGameOverScreen()
