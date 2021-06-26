@@ -262,6 +262,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7191979265716923568}
     m_Modifications:
+    - target: {fileID: 6646971368470986317, guid: d534bb75a6c277a4c893ca315b82efcc, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6646971368470986318, guid: d534bb75a6c277a4c893ca315b82efcc, type: 3}
       propertyPath: m_Name
       value: Blood
@@ -276,11 +280,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6646971368470986319, guid: d534bb75a6c277a4c893ca315b82efcc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.084
+      value: 1.272
       objectReference: {fileID: 0}
     - target: {fileID: 6646971368470986319, guid: d534bb75a6c277a4c893ca315b82efcc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.473
+      value: -0.857
       objectReference: {fileID: 0}
     - target: {fileID: 6646971368470986319, guid: d534bb75a6c277a4c893ca315b82efcc, type: 3}
       propertyPath: m_LocalRotation.w

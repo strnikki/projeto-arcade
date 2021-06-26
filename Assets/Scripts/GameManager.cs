@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] GameObject pauseScreen;
     [SerializeField] SpawnManager[] spawnManagers;
+    [SerializeField] GameObject boss;
+    [SerializeField] Transform bossSpawn;
 
     private Player player;
 
@@ -37,7 +39,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            maxScore = 20;
+            maxScore = 2;
         }
 
         AudioManager.instance.Play("Stage One Theme");
@@ -85,11 +87,23 @@ public class GameManager : MonoBehaviour
         score += points;
         scoreText.text = "Score: " + score;
 
-        if(score == maxScore)
-            StageComplete();
+        if(score == maxScore){
+            if(SceneManager.GetActiveScene().name == "MainScene"){
+                StageComplete();
+            }
+            else 
+            {
+                SpawnBoss();
+            }
+        }
     }
 
-    private void StageComplete()
+    private void SpawnBoss()
+    {
+        Instantiate(boss, bossSpawn.position, boss.transform.rotation);
+    }
+
+    public void StageComplete()
     {
         scoreText.text = "STAGE COMPLETE";
         stageCompleteMessage = true;

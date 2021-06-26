@@ -21,6 +21,9 @@ public class Target : MonoBehaviour
             case "Enemy":
                 this.GetComponent<Enemy>().TakeDamage(impactForce, damage);
                 break;
+            case "Boss":
+                this.GetComponent<Boss>().TakeDamage(impactForce, damage);
+                break;
             case "Shootable":
                 this.GetComponent<Shootable>().TakeDamage(impactForce, damage);
                 break;

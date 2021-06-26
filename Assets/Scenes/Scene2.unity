@@ -527,9 +527,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Body
       objectReference: {fileID: 0}
+    - target: {fileID: 7982033832260726360, guid: 56517096b21859a48a08ec9131a4802a, type: 3}
+      propertyPath: m_Radius
+      value: 0.71
+      objectReference: {fileID: 0}
     - target: {fileID: 7982033832260726361, guid: 56517096b21859a48a08ec9131a4802a, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7982033832260726361, guid: 56517096b21859a48a08ec9131a4802a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -712,6 +716,8 @@ MonoBehaviour:
   - {fileID: 847684726}
   - {fileID: 0}
   - {fileID: 0}
+  boss: {fileID: 6642838566352430966, guid: 4e8f94a586b9419439d37a34dd848669, type: 3}
+  bossSpawn: {fileID: 2052650742}
 --- !u!4 &409025871
 Transform:
   m_ObjectHideFlags: 0
@@ -1287,6 +1293,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flying Enemy Spawn Manager First Area
       objectReference: {fileID: 0}
+    - target: {fileID: 4843636888538766485, guid: 3914798479ca04347ae66aadd2615387, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3914798479ca04347ae66aadd2615387, type: 3}
 --- !u!114 &847684726 stripped
@@ -1717,9 +1727,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spawn Manager First Area
       objectReference: {fileID: 0}
+    - target: {fileID: 7362657631788445841, guid: 1dd9f655270aa3542baa63a6979786c2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7362657631788445843, guid: 1dd9f655270aa3542baa63a6979786c2, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7362657631788445843, guid: 1dd9f655270aa3542baa63a6979786c2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4050,6 +4064,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68d42e6050c73f140b1b9f9afa77f399, type: 3}
+--- !u!1 &2052650741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2052650742}
+  m_Layer: 0
+  m_Name: Boss Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2052650742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052650741}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -18.624308, y: 18.4, z: -124.05}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &2073394998
 GameObject:
   m_ObjectHideFlags: 0
