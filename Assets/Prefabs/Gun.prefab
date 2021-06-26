@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc6f2a6fd5823e646b2a42eba957ccf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponDamage: 10
+  weaponDamage: 5
   weaponImpact: 100
   shootingCooldown: 0.5
   sparks: {fileID: 0}
