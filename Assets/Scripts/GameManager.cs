@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "MainScene")
         {
-            maxScore = 10;
+            maxScore = 2;
         }
         else
         {
@@ -105,7 +105,14 @@ public class GameManager : MonoBehaviour
 
     public void StageComplete()
     {
-        scoreText.text = "STAGE COMPLETE";
+        if(SceneManager.GetActiveScene().name == "MainScene"){
+            scoreText.text = "STAGE COMPLETE";
+        }
+        else 
+        {
+            scoreText.text = "YOU WON";
+        }
+        
         stageCompleteMessage = true;
         StartCoroutine(StageTransitionCooldown());
     }
@@ -113,7 +120,14 @@ public class GameManager : MonoBehaviour
     IEnumerator StageTransitionCooldown()
     {
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene("Scene2");
+
+        if(SceneManager.GetActiveScene().name == "MainScene"){
+            SceneManager.LoadScene("Scene2");
+        }
+        else 
+        {
+            SceneManager.LoadScene("StartMenu");
+        }
     }
 
     public void ShowGameOverScreen()

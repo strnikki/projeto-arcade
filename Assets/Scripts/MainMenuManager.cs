@@ -12,12 +12,15 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] TMP_Text volumeText;
     [SerializeField] GameObject mainMenu;
     [SerializeField] GameObject optionsMenu;
+    [SerializeField] GameObject creditsScreen;
 
     private bool isFullscreen = true;
 
     private void Start() 
     {
+        AudioManager.instance.Stop("Stage One Theme");
         AudioManager.instance.Play("Main Menu Theme");
+        Cursor.lockState = CursorLockMode.None;
         f_Toggle.onValueChanged.AddListener(delegate {
             ToogleFullscreen(f_Toggle);
         });
@@ -35,10 +38,17 @@ public class MainMenuManager : MonoBehaviour
         optionsMenu.SetActive(true);
     }
 
+    public void CreditsScreen()
+    {
+        mainMenu.SetActive(false);
+        creditsScreen.SetActive(true);
+    }
+
     public void MainMenu()
     {
         mainMenu.SetActive(true);
         optionsMenu.SetActive(false);
+        creditsScreen.SetActive(false);
     }
 
     public void ChangeResolution(int val)
