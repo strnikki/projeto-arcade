@@ -247,7 +247,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void SlowMotion()
     {
-        if(Input.GetKey(KeyCode.E))
+        if(Input.GetButton("Fire2"))
         {
             Time.timeScale = slowDownFactor;
             Time.fixedDeltaTime = Time.timeScale * .02f;

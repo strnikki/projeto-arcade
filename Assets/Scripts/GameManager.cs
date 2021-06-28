@@ -8,6 +8,7 @@ using System;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text winText;
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] GameObject pauseScreen;
     [SerializeField] SpawnManager[] spawnManagers;
@@ -35,11 +36,11 @@ public class GameManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "MainScene")
         {
-            maxScore = 2;
+            maxScore = 10;
         }
         else
         {
-            maxScore = 2;
+            maxScore = 20;
         }
 
         AudioManager.instance.Play("Stage One Theme");
@@ -56,6 +57,18 @@ public class GameManager : MonoBehaviour
             else
             {
                 Pause();
+            }
+        }
+
+        if(Input.GetKeyDown(KeyCode.N) && Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            if (SceneManager.GetActiveScene().name == "MainScene")
+            {
+                SceneManager.LoadScene("Scene2");
+            }
+            else
+            {
+                SpawnBoss();
             }
         }
     }
@@ -82,8 +95,6 @@ public class GameManager : MonoBehaviour
 
     public void UpdateScore(int points)
     {
-        if(stageCompleteMessage)
-            return;
         score += points;
         scoreText.text = "Score: " + score;
 
@@ -106,11 +117,13 @@ public class GameManager : MonoBehaviour
     public void StageComplete()
     {
         if(SceneManager.GetActiveScene().name == "MainScene"){
-            scoreText.text = "STAGE COMPLETE";
+            winText.gameObject.SetActive(true);
+            winText.text = "STAGE COMPLETE";
         }
         else 
         {
-            scoreText.text = "YOU WON";
+            winText.gameObject.SetActive(true);
+            winText.text = "YOU WON";
         }
         
         stageCompleteMessage = true;
@@ -120,6 +133,7 @@ public class GameManager : MonoBehaviour
     IEnumerator StageTransitionCooldown()
     {
         yield return new WaitForSeconds(5f);
+        winText.gameObject.SetActive(false);
 
         if(SceneManager.GetActiveScene().name == "MainScene"){
             SceneManager.LoadScene("Scene2");
@@ -132,6 +146,8 @@ public class GameManager : MonoBehaviour
 
     public void ShowGameOverScreen()
     {
+        if(stageCompleteMessage)
+            return;
         AudioManager.instance.Stop("Stage One Theme");
         gameOverScreen.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
